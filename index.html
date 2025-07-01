@@ -1,16 +1,134 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-		<meta name="generator" content="Hostinger Horizons" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="Focusify - Stay focused, get more done. A productivity app that helps you organize tasks, manage time, and eliminate distractions." />
-		<title>Focusify - Boost Your Productivity</title>
-	</head>
-	<body>
-		<div id="root"></div>
-		<script type="module" src="/src/main.jsx"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentry - Productivity App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <span class="logo-text">Sentry</span>
+                </a>
+                <nav class="nav-menu">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </button>
+                    <a href="dashboard.html" class="btn btn-outline">Sign In</a>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Stay focused.<br>
+                    Get things done.
+                </h1>
+                <p class="hero-description">
+                    A simple, powerful productivity app that helps you organize your tasks, manage your time, and achieve your goals without the clutter.
+                </p>
+                <div class="hero-buttons">
+                    <a href="dashboard.html" class="btn btn-primary btn-large">Start Free Trial</a>
+                    <button class="btn btn-outline btn-large">Watch Demo</button>
+                </div>
+                <p class="hero-note">No credit card required • 14-day free trial</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="features-panel">
+                <div class="section-header">
+                    <h2 class="section-title">Everything you need to stay productive</h2>
+                    <p class="section-description">Simple tools that work together seamlessly</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="feature-title">Task Management</h3>
+                        <p class="feature-description">Organize your tasks with intuitive lists, priorities, and due dates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="feature-title">Time Tracking</h3>
+                        <p class="feature-description">Track time spent on tasks and projects to improve your productivity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Smart Insights</h3>
+                        <p class="feature-description">Get personalized insights to optimize your workflow and habits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to boost your productivity?</h2>
+                <p class="cta-description">Join thousands of users who have transformed their workflow with Sentry.</p>
+                <div class="cta-form">
+                    <input type="email" placeholder="Enter your email" class="email-input">
+                    <a href="dashboard.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <p class="cta-note">Start your free trial today</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <span class="logo-text">Sentry</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sentry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
 </html>

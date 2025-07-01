@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sentry</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header dashboard-header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <span class="logo-text">Sentry</span>
+                </a>
+                <div class="dashboard-nav">
+                    <a href="index.html" class="back-link">← Back to Home</a>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </button>
+                    <button class="btn btn-outline btn-small">Settings</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard">
+        <div class="dashboard-shell">
+        <div class="container">
+            <div class="dashboard-header-content">
+                <h1 class="dashboard-title">Your Productivity Hub</h1>
+                <p class="dashboard-description">Manage your tasks, notes, and mood all in one place</p>
+            </div>
+
+            <!-- Welcome Banner -->
+            <div class="welcome-banner" id="welcomeBanner">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <div class="welcome-text-content">
+                        <h3>Welcome to Sentry!</h3>
+                        <p>You're all set up! Start by adding your first task, creating a note, or logging your mood.</p>
+                        <div class="welcome-buttons">
+                            <button class="btn btn-small btn-white" onclick="dismissWelcome()">Get Started</button>
+                            <button class="btn btn-small btn-ghost" onclick="dismissWelcome()">Take a Tour</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="welcome-close" onclick="dismissWelcome()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-square"></i>
+                    </div>
+                    <div class="stat-number" id="tasksCompleted">0</div>
+                    <div class="stat-label">Tasks Done</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-text"></i>
+                    </div>
+                    <div class="stat-number" id="notesCount">0</div>
+                    <div class="stat-label">Notes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="stat-number" id="journalEntries">0</div>
+                    <div class="stat-label">Journal Entries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="stat-number" id="moodEntries">0</div>
+                    <div class="stat-label">Mood Logs</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab-list">
+                    <button class="tab-button active" data-tab="tasks">
+                        <i class="fas fa-check-square"></i>
+                        Tasks
+                    </button>
+                    <button class="tab-button" data-tab="notes">
+                        <i class="fas fa-file-text"></i>
+                        Notes
+                    </button>
+                    <button class="tab-button" data-tab="calendar">
+                        <i class="fas fa-calendar"></i>
+                        Calendar
+                    </button>
+                    <button class="tab-button" data-tab="journal">
+                        <i class="fas fa-book-open"></i>
+                        Journal
+                    </button>
+                    <button class="tab-button" data-tab="mood">
+                        <i class="fas fa-heart"></i>
+                        Mood
+                    </button>
+                </div>
+
+                <!-- Tasks Tab -->
+                <div class="tab-content active" id="tasks">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-tasks"></i>
+                                Task Manager
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="task-input-section">
+                                <div class="input-group">
+                                    <input type="text" id="newTaskInput" placeholder="Add a new task..." class="input">
+                                    <button class="btn btn-primary" onclick="addTask()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="tags-input" id="taskTagsInput">
+                                    <div class="tags-container" id="taskTags"></div>
+                                    <input type="text" placeholder="Add tags (project, urgent, etc.)" class="tag-input" id="taskTagInput">
+                                    <button class="btn btn-small btn-primary" onclick="addTaskTag()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tasks-list" id="tasksList"></div>
+                            <div class="tasks-summary" id="tasksSummary"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes Tab -->
+                <div class="tab-content" id="notes">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-edit"></i>
+                                Notes Manager
+                            </h3>
+                            <button class="btn btn-primary btn-small" onclick="showNewNoteForm()">
+                                <i class="fas fa-plus"></i>
+                                New Note
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="new-note-form hidden" id="newNoteForm">
+                                <input type="text" id="newNoteTitle" placeholder="Note title..." class="input">
+                                <textarea id="newNoteContent" placeholder="Write your note here..." class="textarea" rows="4"></textarea>
+                                <div class="tags-input">
+                                    <div class="tags-container" id="noteTags"></div>
+                                    <input type="text" placeholder="Add note tags (work, personal, ideas, etc.)" class="tag-input" id="noteTagInput">
+                                    <button class="btn btn-small btn-primary" onclick="addNoteTag()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="form-buttons">
+                                    <button class="btn btn-primary btn-small" onclick="saveNote()">
+                                        <i class="fas fa-save"></i>
+                                        Save
+                                    </button>
+                                    <button class="btn btn-outline btn-small" onclick="cancelNewNote()">
+                                        <i class="fas fa-times"></i>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="notes-list" id="notesList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Tab -->
+                <div class="tab-content" id="calendar">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-calendar"></i>
+                                Calendar
+                            </h3>
+                            <button class="btn btn-primary btn-small">
+                                <i class="fas fa-plus"></i>
+                                Add Event
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="calendar-header">
+                                <button class="btn btn-outline btn-small" onclick="previousMonth()">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <h2 id="currentMonth"></h2>
+                                <button class="btn btn-outline btn-small" onclick="nextMonth()">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid"></div>
+                            <div class="upcoming-events">
+                                <h3>Upcoming Events</h3>
+                                <div id="upcomingEventsList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Journal Tab -->
+                <div class="tab-content" id="journal">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-book-open"></i>
+                                Daily Journal
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="journal-form">
+                                <div class="journal-date">
+                                    <i class="fas fa-calendar"></i>
+                                    <span id="journalDate"></span>
+                                </div>
+                                <div class="mood-selector">
+                                    <label>How are you feeling today?</label>
+                                    <div class="mood-buttons">
+                                        <button class="mood-button" data-mood="great" onclick="selectJournalMood('great')">
+                                            <span class="mood-emoji">😄</span>
+                                            <span class="mood-label">Great</span>
+                                        </button>
+                                        <button class="mood-button" data-mood="good" onclick="selectJournalMood('good')">
+                                            <span class="mood-emoji">😊</span>
+                                            <span class="mood-label">Good</span>
+                                        </button>
+                                        <button class="mood-button active" data-mood="okay" onclick="selectJournalMood('okay')">
+                                            <span class="mood-emoji">😐</span>
+                                            <span class="mood-label">Okay</span>
+                                        </button>
+                                        <button class="mood-button" data-mood="bad" onclick="selectJournalMood('bad')">
+                                            <span class="mood-emoji">😔</span>
+                                            <span class="mood-label">Bad</span>
+                                        </button>
+                                        <button class="mood-button" data-mood="terrible" onclick="selectJournalMood('terrible')">
+                                            <span class="mood-emoji">😢</span>
+                                            <span class="mood-label">Terrible</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="journal-input">
+                                    <label>What's on your mind?</label>
+                                    <textarea id="journalContent" placeholder="Write about your day, thoughts, feelings, or anything else..." class="textarea" rows="6"></textarea>
+                                </div>
+                                <div class="tags-input">
+                                    <label>Tags</label>
+                                    <div class="tags-container" id="journalTags"></div>
+                                    <input type="text" placeholder="Add journal tags (gratitude, reflection, goals, etc.)" class="tag-input" id="journalTagInput">
+                                    <button class="btn btn-small btn-primary" onclick="addJournalTag()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveJournalEntry()">
+                                    <i class="fas fa-save"></i>
+                                    Save Entry
+                                </button>
+                            </div>
+                            <div class="journal-entries">
+                                <h3>Previous Entries</h3>
+                                <div id="journalEntriesList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Tab -->
+                <div class="tab-content" id="mood">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-heart"></i>
+                                Mood Log
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="mood-stats">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="totalMoodEntries">0</div>
+                                    <div class="stat-label">Total Entries</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="averageMood">0.0</div>
+                                    <div class="stat-label">Avg Mood</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="todayMoodEntries">0</div>
+                                    <div class="stat-label">Today</div>
+                                </div>
+                            </div>
+                            <div class="mood-form">
+                                <div class="mood-date">
+                                    <i class="fas fa-calendar"></i>
+                                    <span id="moodDate"></span>
+                                </div>
+                                <div class="mood-scale">
+                                    <label>How are you feeling right now?</label>
+                                    <div class="mood-scale-buttons">
+                                        <button class="mood-scale-button" data-mood="1" onclick="selectMoodScale(1)">
+                                            <span class="mood-emoji">😢</span>
+                                            <span class="mood-label">Very Low</span>
+                                        </button>
+                                        <button class="mood-scale-button" data-mood="2" onclick="selectMoodScale(2)">
+                                            <span class="mood-emoji">😔</span>
+                                            <span class="mood-label">Low</span>
+                                        </button>
+                                        <button class="mood-scale-button active" data-mood="3" onclick="selectMoodScale(3)">
+                                            <span class="mood-emoji">😐</span>
+                                            <span class="mood-label">Neutral</span>
+                                        </button>
+                                        <button class="mood-scale-button" data-mood="4" onclick="selectMoodScale(4)">
+                                            <span class="mood-emoji">😊</span>
+                                            <span class="mood-label">Good</span>
+                                        </button>
+                                        <button class="mood-scale-button" data-mood="5" onclick="selectMoodScale(5)">
+                                            <span class="mood-emoji">😄</span>
+                                            <span class="mood-label">Excellent</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mood-note">
+                                    <label>What's happening? (optional)</label>
+                                    <textarea id="moodNote" placeholder="Describe your mood, what triggered it, or any thoughts you'd like to record..." class="textarea" rows="4"></textarea>
+                                </div>
+                                <div class="tags-input">
+                                    <label>Tags</label>
+                                    <div class="tags-container" id="moodTags"></div>
+                                    <input type="text" placeholder="Add mood tags (work, family, exercise, etc.)" class="tag-input" id="moodTagInput">
+                                    <button class="btn btn-small btn-primary" onclick="addMoodTag()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveMoodEntry()">
+                                    <i class="fas fa-save"></i>
+                                    Save Mood Entry
+                                </button>
+                            </div>
+                            <div class="mood-entries">
+                                <h3>Recent Entries</h3>
+                                <div id="moodEntriesList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Quick Actions FAB -->
+    <div class="quick-actions">
+        <div class="quick-actions-menu" id="quickActionsMenu">
+            <button class="quick-action-btn" onclick="quickAction('tasks')">
+                <i class="fas fa-check-square"></i>
+                Add Task
+            </button>
+            <button class="quick-action-btn" onclick="quickAction('notes')">
+                <i class="fas fa-file-text"></i>
+                New Note
+            </button>
+            <button class="quick-action-btn" onclick="quickAction('journal')">
+                <i class="fas fa-book-open"></i>
+                Journal
+            </button>
+            <button class="quick-action-btn" onclick="quickAction('mood')">
+                <i class="fas fa-heart"></i>
+                Log Mood
+            </button>
+        </div>
+        <button class="quick-actions-toggle" id="quickActionsToggle" onclick="toggleQuickActions()">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
