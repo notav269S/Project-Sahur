@@ -14,6 +14,7 @@ const AppState = {
   currentMonth: new Date().getMonth(),
   currentYear: new Date().getFullYear(),
   quickActionsOpen: false,
+  events: JSON.parse(localStorage.getItem("focus-events")) || [],
 }
 
 // Theme management
@@ -402,6 +403,39 @@ function nextMonth() {
   renderCalendar()
 }
 
+function getEventsForDate(year, month, day) {
+  const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  // User events
+  const events = (AppState.events || []).filter(event => {
+    if (event.allDay) {
+      // All day event: check if date is in range
+      const start = event.start.split('T')[0];
+      const end = event.end ? event.end.split('T')[0] : start;
+      return dateStr >= start && dateStr <= end;
+    } else {
+      // Timed event: check if date is in range
+      const start = event.start.split('T')[0];
+      const end = event.end ? event.end.split('T')[0] : start;
+      return dateStr >= start && dateStr <= end;
+    }
+  }).map(event => ({
+    ...event,
+    title: event.name,
+    time: event.allDay ? 'All day' : (event.start.split('T')[1] || '').slice(0,5) + (event.end ? ' - ' + (event.end.split('T')[1] || '').slice(0,5) : ''),
+    type: 'event',
+  }));
+  // Tasks with due dates
+  const tasks = (AppState.tasks || []).filter(task => task.dueDate && task.dueDate.split('T')[0] === dateStr)
+    .map(task => ({
+      ...task,
+      title: task.title,
+      type: 'task',
+      completed: task.completed,
+      id: task.id,
+    }));
+  return [...events, ...tasks];
+}
+
 function renderCalendar() {
   const monthElement = document.getElementById("currentMonth")
   const gridElement = document.getElementById("calendarGrid")
@@ -409,18 +443,8 @@ function renderCalendar() {
   if (!monthElement || !gridElement) return
 
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ]
 
   monthElement.textContent = `${monthNames[AppState.currentMonth]} ${AppState.currentYear}`
@@ -449,39 +473,34 @@ function renderCalendar() {
     const events = getEventsForDate(AppState.currentYear, AppState.currentMonth, day)
 
     calendarHTML += `
-            <div class="calendar-day ${isToday ? "today" : ""}">
-                <div class="calendar-day-number">${day}</div>
-                <div class="calendar-events">
-                    ${events
-                      .slice(0, 2)
-                      .map(
-                        (event) => `
-                        <div class="calendar-event event-${event.type}" title="${event.title} at ${event.time}">
-                            ${event.title}
-                        </div>
-                    `,
-                      )
-                      .join("")}
-                    ${events.length > 2 ? `<div class="calendar-event">+${events.length - 2} more</div>` : ""}
-                </div>
-            </div>
-        `
+      <div class="calendar-day ${isToday ? "today" : ""}">
+        <div class="calendar-day-number">${day}</div>
+        <div class="calendar-events">
+          ${events
+            .map(event => {
+              if (event.type === 'event') {
+                return `<div class="calendar-event event-block" title="${event.title} ${event.time ? 'at ' + event.time : ''}">
+                  <strong>${event.title}</strong><br>
+                  <span style="font-size:0.8em;">${event.time}</span>
+                </div>`
+              } else if (event.type === 'task') {
+                return `<div class="calendar-event event-task" title="${event.title}">
+                  <label style="display:flex;align-items:center;gap:0.25em;">
+                    <input type="checkbox" onchange="toggleCalendarTask('${event.id}')" ${event.completed ? 'checked' : ''}>
+                    <span style="${event.completed ? 'text-decoration:line-through;opacity:0.6;' : ''}">${event.title}</span>
+                  </label>
+                </div>`
+              }
+              return ''
+            })
+            .join("")}
+        </div>
+      </div>
+    `
   }
 
   gridElement.innerHTML = calendarHTML
   renderUpcomingEvents()
-}
-
-function getEventsForDate(year, month, day) {
-  // Sample events - in a real app, this would come from your data
-  const sampleEvents = [
-    { id: "1", title: "Team Meeting", date: "2024-01-15", time: "10:00", type: "meeting" },
-    { id: "2", title: "Project Deadline", date: "2024-01-18", time: "17:00", type: "task" },
-    { id: "3", title: "Lunch with Sarah", date: "2024-01-20", time: "12:30", type: "personal" },
-  ]
-
-  const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-  return sampleEvents.filter((event) => event.date === dateStr)
 }
 
 function renderUpcomingEvents() {
@@ -770,24 +789,29 @@ function getMoodEmoji(mood) {
     3: "😐",
     4: "😊",
     5: "😄",
-    great: "😄",
-    good: "😊",
-    okay: "😐",
-    bad: "😔",
     terrible: "😢",
-  }
-  return emojiMap[mood] || "😐"
+    bad: "😔",
+    okay: "😐",
+    good: "😊",
+    excellent: "😄"
+  };
+  return emojiMap[mood] || "😐";
 }
 
 function getMoodLabel(mood) {
   const labelMap = {
-    1: "Very Low",
-    2: "Low",
-    3: "Neutral",
+    1: "Terrible",
+    2: "Bad",
+    3: "Okay",
     4: "Good",
     5: "Excellent",
-  }
-  return labelMap[mood] || "Neutral"
+    terrible: "Terrible",
+    bad: "Bad",
+    okay: "Okay",
+    good: "Good",
+    excellent: "Excellent"
+  };
+  return labelMap[mood] || "Okay";
 }
 
 // Quick actions
@@ -929,3 +953,64 @@ function initApp() {
 
 // Start the app when DOM is loaded
 document.addEventListener("DOMContentLoaded", initApp)
+
+// Calendar Event Modal Logic
+function openEventModal() {
+  document.getElementById('calendarEventModal').classList.remove('hidden');
+}
+function closeEventModal() {
+  document.getElementById('calendarEventModal').classList.add('hidden');
+  document.getElementById('calendarEventForm').reset();
+  document.getElementById('eventStart').disabled = false;
+  document.getElementById('eventEnd').disabled = false;
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const openBtn = document.getElementById('openEventModal');
+  const closeBtn = document.getElementById('closeEventModal');
+  const allDayCheckbox = document.getElementById('eventAllDay');
+  if (openBtn) openBtn.onclick = openEventModal;
+  if (closeBtn) closeBtn.onclick = closeEventModal;
+  if (allDayCheckbox) {
+    allDayCheckbox.onchange = function() {
+      document.getElementById('eventStart').type = this.checked ? 'date' : 'datetime-local';
+      document.getElementById('eventEnd').type = this.checked ? 'date' : 'datetime-local';
+    };
+  }
+  const form = document.getElementById('calendarEventForm');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('eventName').value.trim();
+      const description = document.getElementById('eventDescription').value.trim();
+      const allDay = document.getElementById('eventAllDay').checked;
+      const start = document.getElementById('eventStart').value;
+      const end = document.getElementById('eventEnd').value;
+      if (!name || (!allDay && (!start || !end))) return;
+      const event = {
+        id: generateId(),
+        name,
+        description,
+        allDay,
+        start,
+        end,
+        type: 'event',
+      };
+      if (!AppState.events) AppState.events = [];
+      AppState.events.push(event);
+      saveToLocalStorage('focus-events', AppState.events);
+      closeEventModal();
+      renderCalendar();
+    };
+  }
+});
+
+// Add logic to check off tasks from the calendar
+function toggleCalendarTask(taskId) {
+  const task = AppState.tasks.find(t => t.id === taskId);
+  if (task) {
+    task.completed = !task.completed;
+    saveToLocalStorage('focus-tasks', AppState.tasks);
+    renderCalendar();
+    renderTasks && renderTasks();
+  }
+}

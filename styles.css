@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 /* Reset and Base Styles */
 * {
   margin: 0;
@@ -51,7 +53,7 @@
 }
 
 body {
-  font-family: 'Montserrat', 'Segoe UI', 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Poppins', 'Segoe UI', 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-primary);
   background: var(--bg-primary);
@@ -87,6 +89,17 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 4rem;
+}
+
+.logo, .nav-menu {
+  background: var(--bg-tertiary);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  transition: background 0.2s;
+}
+
+[data-theme="dark"] .logo, [data-theme="dark"] .nav-menu {
+  background: #232326;
 }
 
 .logo {
@@ -619,7 +632,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .tab-button:hover {
@@ -1243,46 +1256,94 @@ body {
   margin-bottom: 0.75rem;
 }
 
-.mood-buttons {
+.mood-buttons, .mood-scale-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.mood-button {
+.mood-button, .mood-scale-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.5rem;
-  border: 2px solid var(--border-color);
-  border-radius: 0.5rem;
-  background: none;
+  justify-content: center;
+  background: none !important;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 0;
+  min-width: 80px;
+  min-height: 100px;
+  transition: box-shadow 0.2s, background 0.2s;
+  border-radius: 1.5rem;
+  position: relative;
 }
 
-.mood-button:hover {
-  border-color: var(--border-light);
-}
-
-.mood-button.active {
-  border-color: var(--green-500);
-  background: var(--green-50);
-}
-
-[data-theme="dark"] .mood-button.active {
-  background: rgba(34, 197, 94, 0.1);
+.mood-button:focus, .mood-scale-button:focus,
+.mood-button:active, .mood-scale-button:active,
+.mood-button:focus-visible, .mood-scale-button:focus-visible,
+.mood-button:focus-within, .mood-scale-button:focus-within,
+.mood-button.active, .mood-scale-button.active {
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .mood-emoji {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+  font-size: 2.5rem;
+  background: none !important;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  transition: transform 0.15s, background 0.2s, color 0.2s;
+  text-align: center;
+  line-height: 56px;
+  padding: 0;
+  box-shadow: none !important;
+  color: inherit;
+}
+
+.mood-button:hover .mood-emoji,
+.mood-scale-button:hover .mood-emoji {
+  transform: scale(1.18);
+  background: none !important;
+  color: inherit;
+}
+
+.mood-button.active .mood-emoji,
+.mood-scale-button.active .mood-emoji {
+  background: #22c55e !important;
+  color: #fff !important;
+  transform: scale(1.22);
+}
+
+[data-theme="dark"] .mood-button.active .mood-emoji,
+[data-theme="dark"] .mood-scale-button.active .mood-emoji {
+  background: #328E6E !important;
+  color: #fff !important;
 }
 
 .mood-label {
-  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
   text-transform: capitalize;
+}
+
+.mood-button.active, .mood-scale-button.active {
+  background: #fef3c7;
+  box-shadow: 0 4px 16px 0 rgba(250, 204, 21, 0.12);
+}
+[data-theme="dark"] .mood-button.active, [data-theme="dark"] .mood-scale-button.active {
+  background: rgba(146, 64, 14, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(146, 64, 14, 0.18);
 }
 
 .journal-input {
@@ -1888,4 +1949,80 @@ input, textarea, .input, .textarea {
 [data-theme="dark"] .tab-content {
   background: #23282b;
   box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18), 0 1.5px 6px 0 rgba(50, 142, 110, 0.08);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] .input,
+[data-theme="dark"] .textarea,
+[data-theme="dark"] .tag-input,
+[data-theme="dark"] .email-input {
+  background: #232326;
+  color: #E1EEBC;
+  border: 1px solid #328E6E;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+[data-theme="dark"] .input::placeholder,
+[data-theme="dark"] .textarea::placeholder,
+[data-theme="dark"] .tag-input::placeholder,
+[data-theme="dark"] .email-input::placeholder {
+  color: #90C67C;
+  opacity: 1;
+}
+
+[data-theme="dark"] .mood-emoji {
+  background: #232326;
+  color: #E1EEBC;
+  box-shadow: 0 2px 8px 0 rgba(50, 142, 110, 0.18);
+}
+[data-theme="dark"] .mood-button:hover .mood-emoji,
+[data-theme="dark"] .mood-scale-button:hover .mood-emoji,
+[data-theme="dark"] .mood-button.active .mood-emoji,
+[data-theme="dark"] .mood-scale-button.active .mood-emoji {
+  background: #18181b;
+  box-shadow: 0 4px 16px 0 rgba(146, 64, 14, 0.18);
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 32px 0 rgba(50, 142, 110, 0.10);
+  padding: 2rem 2.5rem;
+  min-width: 320px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+[data-theme="dark"] .modal-content {
+  background: #232326;
+  color: #E1EEBC;
+}
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+}
+#calendarEventForm label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+#calendarEventForm .input-group {
+  gap: 1rem;
 }

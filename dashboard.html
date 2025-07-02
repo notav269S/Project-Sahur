@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="tags-input" id="taskTagsInput">
                                     <div class="tags-container" id="taskTags"></div>
-                                    <input type="text" placeholder="Add tags (project, urgent, etc.)" class="tag-input" id="taskTagInput">
+                                    <input type="text" placeholder="Tags" class="tag-input" id="taskTagInput">
                                     <button class="btn btn-small btn-primary" onclick="addTaskTag()">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -166,7 +166,7 @@
                                 <textarea id="newNoteContent" placeholder="Write your note here..." class="textarea" rows="4"></textarea>
                                 <div class="tags-input">
                                     <div class="tags-container" id="noteTags"></div>
-                                    <input type="text" placeholder="Add note tags (work, personal, ideas, etc.)" class="tag-input" id="noteTagInput">
+                                    <input type="text" placeholder="Tags" class="tag-input" id="noteTagInput">
                                     <button class="btn btn-small btn-primary" onclick="addNoteTag()">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -195,7 +195,7 @@
                                 <i class="fas fa-calendar"></i>
                                 Calendar
                             </h3>
-                            <button class="btn btn-primary btn-small">
+                            <button class="btn btn-primary btn-small" id="openEventModal">
                                 <i class="fas fa-plus"></i>
                                 Add Event
                             </button>
@@ -237,15 +237,15 @@
                                 <div class="mood-selector">
                                     <label>How are you feeling today?</label>
                                     <div class="mood-buttons">
-                                        <button class="mood-button" data-mood="great" onclick="selectJournalMood('great')">
+                                        <button class="mood-button" data-mood="excellent" onclick="selectJournalMood('excellent')">
                                             <span class="mood-emoji">😄</span>
-                                            <span class="mood-label">Great</span>
+                                            <span class="mood-label">Excellent</span>
                                         </button>
                                         <button class="mood-button" data-mood="good" onclick="selectJournalMood('good')">
                                             <span class="mood-emoji">😊</span>
                                             <span class="mood-label">Good</span>
                                         </button>
-                                        <button class="mood-button active" data-mood="okay" onclick="selectJournalMood('okay')">
+                                        <button class="mood-button" data-mood="okay" onclick="selectJournalMood('okay')">
                                             <span class="mood-emoji">😐</span>
                                             <span class="mood-label">Okay</span>
                                         </button>
@@ -266,7 +266,7 @@
                                 <div class="tags-input">
                                     <label>Tags</label>
                                     <div class="tags-container" id="journalTags"></div>
-                                    <input type="text" placeholder="Add journal tags (gratitude, reflection, goals, etc.)" class="tag-input" id="journalTagInput">
+                                    <input type="text" placeholder="Tags" class="tag-input" id="journalTagInput">
                                     <button class="btn btn-small btn-primary" onclick="addJournalTag()">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -316,25 +316,25 @@
                                 <div class="mood-scale">
                                     <label>How are you feeling right now?</label>
                                     <div class="mood-scale-buttons">
-                                        <button class="mood-scale-button" data-mood="1" onclick="selectMoodScale(1)">
-                                            <span class="mood-emoji">😢</span>
-                                            <span class="mood-label">Very Low</span>
-                                        </button>
-                                        <button class="mood-scale-button" data-mood="2" onclick="selectMoodScale(2)">
-                                            <span class="mood-emoji">😔</span>
-                                            <span class="mood-label">Low</span>
-                                        </button>
-                                        <button class="mood-scale-button active" data-mood="3" onclick="selectMoodScale(3)">
-                                            <span class="mood-emoji">😐</span>
-                                            <span class="mood-label">Neutral</span>
+                                        <button class="mood-scale-button" data-mood="5" onclick="selectMoodScale(5)">
+                                            <span class="mood-emoji">😄</span>
+                                            <span class="mood-label">Excellent</span>
                                         </button>
                                         <button class="mood-scale-button" data-mood="4" onclick="selectMoodScale(4)">
                                             <span class="mood-emoji">😊</span>
                                             <span class="mood-label">Good</span>
                                         </button>
-                                        <button class="mood-scale-button" data-mood="5" onclick="selectMoodScale(5)">
-                                            <span class="mood-emoji">😄</span>
-                                            <span class="mood-label">Excellent</span>
+                                        <button class="mood-scale-button" data-mood="3" onclick="selectMoodScale(3)">
+                                            <span class="mood-emoji">😐</span>
+                                            <span class="mood-label">Okay</span>
+                                        </button>
+                                        <button class="mood-scale-button" data-mood="2" onclick="selectMoodScale(2)">
+                                            <span class="mood-emoji">😔</span>
+                                            <span class="mood-label">Bad</span>
+                                        </button>
+                                        <button class="mood-scale-button" data-mood="1" onclick="selectMoodScale(1)">
+                                            <span class="mood-emoji">😢</span>
+                                            <span class="mood-label">Terrible</span>
                                         </button>
                                     </div>
                                 </div>
@@ -345,7 +345,7 @@
                                 <div class="tags-input">
                                     <label>Tags</label>
                                     <div class="tags-container" id="moodTags"></div>
-                                    <input type="text" placeholder="Add mood tags (work, family, exercise, etc.)" class="tag-input" id="moodTagInput">
+                                    <input type="text" placeholder="Tags" class="tag-input" id="moodTagInput">
                                     <button class="btn btn-small btn-primary" onclick="addMoodTag()">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -390,6 +390,36 @@
         <button class="quick-actions-toggle" id="quickActionsToggle" onclick="toggleQuickActions()">
             <i class="fas fa-plus"></i>
         </button>
+    </div>
+
+    <!-- Calendar Event Modal -->
+    <div id="calendarEventModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Add Event</h3>
+            <form id="calendarEventForm">
+                <label for="eventName">Event Name*</label>
+                <input type="text" id="eventName" class="input" required>
+                <label for="eventDescription">Description</label>
+                <textarea id="eventDescription" class="textarea" rows="2"></textarea>
+                <div class="input-group">
+                    <div style="flex:1">
+                        <label for="eventStart">Start</label>
+                        <input type="datetime-local" id="eventStart" class="input">
+                    </div>
+                    <div style="flex:1">
+                        <label for="eventEnd">End</label>
+                        <input type="datetime-local" id="eventEnd" class="input">
+                    </div>
+                </div>
+                <label style="display:flex;align-items:center;gap:0.5rem;margin:0.5rem 0;">
+                    <input type="checkbox" id="eventAllDay"> All day
+                </label>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary btn-small">Save</button>
+                    <button type="button" class="btn btn-outline btn-small" id="closeEventModal">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="script.js"></script>
